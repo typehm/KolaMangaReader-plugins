@@ -40,9 +40,9 @@ module.exports = {
 
 #### 下面简单几类基本插件的编写的例子。
 # 语言扩展
-语言扩展能为系统增加新的界面显示语言的支持
-原理是在index.js中注册新的语言类型，并为其加载相应的json文件
-一个语言扩展插件包括以下文件
+语言扩展能为系统增加新的界面显示语言的支持  
+原理是在index.js中注册新的语言类型，并为其加载相应的json文件  
+一个语言扩展插件包括以下文件  
 ```js
 + zh_TW
 |--- index.js
@@ -90,9 +90,9 @@ module.exports = {
 ```
 
 # 远程书籍源
->远程书籍源能为系统增加新的在线书籍源
-原理是通过插件请求远程的http源，获得书籍信息后，封装成系统能识别的书籍数据。
-一个书籍源扩展插件包括以下文件
+>远程书籍源能为系统增加新的在线书籍源  
+原理是通过插件请求远程的http源，获得书籍信息后，封装成系统能识别的书籍数据。  
+一个书籍源扩展插件包括以下文件  
 ```js
 + dmzj
 |--- index.js
@@ -100,9 +100,9 @@ module.exports = {
 |--- 依赖文件
 ```
 ### index.js
->插件入口，需要按要求导出一个ProtocolBase的派生类
-并重载ProtocolBase中的方法，实现对远程数据的请求/解析/封装
-插件的编写将会使用到以下的类
+>插件入口，需要按要求导出一个ProtocolBase的派生类  
+并重载ProtocolBase中的方法，实现对远程数据的请求/解析/封装  
+插件的编写将会使用到以下的类  
 ```js
 //书籍源的基类
 class ProtocolBase extends PluginBase {
@@ -132,8 +132,8 @@ class ProtocolBase extends PluginBase {
 #### ProtocolBase.reset()
 重置状态（目前没有使用）
 #### ProtocolBase.get( filter : string, isContinue : boolean ) : Promise({})
-从远程服务器获得书籍列表
-此方法应该返回一个Promise,成功时返回一个如下结构的dict,失败时可以简单的返回错误信息字符串或是异常对象
+从远程服务器获得书籍列表  
+此方法应该返回一个Promise,成功时返回一个如下结构的dict,失败时可以简单的返回错误信息字符串或是异常对象  
 ```js
 {
     filter: filter,     //当前请求的filter参数
@@ -151,16 +151,16 @@ books中的数据结构
 }
 ```
 
-filter参数是由空格分隔开的关键词，如果关键词以$开始，则是一个tag,远程源可以简单的将$移除，或是将其接入对应的远端的搜索系统中
-isCountinue参数表示是否继续上一次的搜索。即如果上一次的搜索返回了pageNo为0并且hasMore为true的结果，则这次应该开始pageNo为1的结果集的获取
+filter参数是由空格分隔开的关键词，如果关键词以$开始，则是一个tag,远程源可以简单的将$移除，或是将其接入对应的远端的搜索系统中  
+isCountinue参数表示是否继续上一次的搜索。即如果上一次的搜索返回了pageNo为0并且hasMore为true的结果，则这次应该开始pageNo为1的结果集的获取  
 
 #### ProtocolBase.open( uri : string) : Promise(BookDetail)
-从远程服务器获得uri对应的书籍的详细信息并组织成一个BookDetail返回。
-此方法应该返回一个Promise,成功时返回一个BookDetail,失败时可以简单的返回错误信息字符串或是异常对象
-uri即get方法中返回的book的path
+从远程服务器获得uri对应的书籍的详细信息并组织成一个BookDetail返回。  
+此方法应该返回一个Promise,成功时返回一个BookDetail,失败时可以简单的返回错误信息字符串或是异常对象  
+uri即get方法中返回的book的path  
 
 
 #### ProtocolBase.close( book : BookDetail) : Promise
-关闭打开的书籍源，以释放相应的资源。
-对于基于http的源而言，基本不需要关注此方法。
-主要用于支持本地文件做为源时，关闭打开的文件之类的资源。
+关闭打开的书籍源，以释放相应的资源。  
+对于基于http的源而言，基本不需要关注此方法。  
+主要用于支持本地文件做为源时，关闭打开的文件之类的资源。  
