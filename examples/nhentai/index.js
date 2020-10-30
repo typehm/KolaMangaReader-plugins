@@ -3,9 +3,8 @@ const {ProtocolBase} = __common__("protocol");
 const {BookDetail, BookCategory, BookChapter} = __common__("book");
 
 class NHentaiBookDetail extends BookDetail {
-    protocol = null;
 
-
+    //chpater数据在open时已经完整的得到，所以直接返回相应的chapter
     LoadChapter(categoryIdx, chapterIdx) {
         return new Promise((resolve, reject) => {
             var chapter = this.category[categoryIdx].chapters[chapterIdx];
@@ -18,10 +17,12 @@ class NHentaiBookDetail extends BookDetail {
             var url = 'https://nhentai.net' + chapter.pages[page.page];
             return fetch(url).then(resp => resp.text())
                 .then(html => {
+                    //解析page对应的url,再从页面中提供src
                     var parser = new DOMParser();
                     var doc = parser.parseFromString(html, "text/html");
                     var all = doc.querySelectorAll("#image-container img");
                     var src = $(all[0]).attr("src");
+                    //下载src的图像并返回
                     return Util.downloadImageToBlob(src);
                 });
         });
@@ -40,9 +41,6 @@ class NHentaiProtocol extends ProtocolBase {
     icon = "https://static.nhentai.net/img/logo.090da3be7b51.svg";
     enable = true;
 
-    actions = [
-        "add", "download"
-    ];
 
     paserPaginationPage(doc, sel, attr, sp) {
         try {
@@ -57,14 +55,18 @@ class NHentaiProtocol extends ProtocolBase {
 
     get(filter, isContinue) {
         return new Promise((resolve, reject) => {
+            //如果继续上一次的搜索并且有最后一次的搜索结果，那么pageNo从上一次的结果增1，否则从0开始
             var pageNo = isContinue && this.lastResult ? this.lastResult.pageNo + 1 : 1;
 
+            //请求书籍列表的url
             var url = 'https://nhentai.net/';
+            //如果带有filter，则url替换为搜索用的url
             if (filter)
                 url += "search/?q=" + filter + "&page=" + pageNo;
             else
                 url += "?page=" + pageNo;
 
+            //访问url
             fetch(url).then(resp => {
                 return resp.text();
             }).then(html => {
@@ -73,11 +75,13 @@ class NHentaiProtocol extends ProtocolBase {
                     pageNo: pageNo,
                 };
                 var books = [];
+                //解析html页面，得到相关的信息
                 var parser = new DOMParser();
                 var doc = parser.parseFromString(html, "text/html");
                 var all = doc.querySelectorAll(".gallery");
                 var pages = this.paserPaginationPage(doc, ".pagination .last", "href", "page=");
 
+                //解析并构造books中的数据
                 all.forEach(item => {
                     var cover = $(".cover img", item).attr("data-src");
                     var url = $(".cover", item).attr("href");
@@ -135,7 +139,7 @@ class NHentaiProtocol extends ProtocolBase {
                 book.protocol = self;
                 book.url = url;
 
-
+                //因为此站书籍下没有子分类及章节，所以构造一个分类和一个章节
                 var category = new BookCategory("", 0);
                 category.name = "";
                 book.category.push(category);
@@ -143,6 +147,7 @@ class NHentaiProtocol extends ProtocolBase {
                 var chapter = new BookChapter(0, "", 0);
                 category.chapters.push(chapter);
 
+                //构造BookDetail
                 var detail = this.parseDetail(html);
                 book.name = detail.name;
                 book.thumbnail = detail.thumbnail;

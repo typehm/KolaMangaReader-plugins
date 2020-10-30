@@ -12,21 +12,28 @@ class EHentaiBookDetail extends BookDetail {
         return this.LoadChapter(page.category, page.chapter).then(chapter => {
             var url = chapter.pages[page.page];
             return new Promise((resolve, reject) => {
+                //如果已经有url了，返回给下一个阶段
                 if ( url )
                     resolve( url );
                 else
+                //如果还没有url,则要先提取。因为eh的一个漫画里可能分很多页，而事先提供全部url会导致打开很慢，所以采取使用时再提取的方法
+                //技术上可以采取更主动的预读策略来隐藏这个过程，这里只是演示则不深入
                 {
+                    //从page推出在哪一个分页，然后构造分页url
                     var p = Math.floor( page.page / this.imagePerPage );
                     var si = p * this.imagePerPage;
                     var purl = this.pagesURL + "?p="+p;
+                    //请求url
                     fetch(purl).then( resp => resp.text())
                         .then( html => {
+                        //解析html,得到这个分页上的图像的url,保存起来
                         var parser = new DOMParser();
                         var doc = parser.parseFromString(html, "text/html");
                         var imgs = doc.querySelectorAll("div.gdtm a");
                         imgs.forEach( (v,i) => {
                             chapter.pages[ si + i ] = v.href;
                         });
+                        //返回需要读取的页面url
                         resolve( chapter.pages[page.page ] );
                     });
                 }
@@ -35,15 +42,18 @@ class EHentaiBookDetail extends BookDetail {
                 return fetch(url)
             })
             .then(resp => resp.text()).then(html => {
+                //解析实际的图像页面
                 var parser = new DOMParser();
                 var doc = parser.parseFromString(html, "text/html");
                 var img = doc.querySelectorAll("img#img");
                 var src = img[0].src;
+                //加载图像并返回blob
                 return Util.downloadImageToBlob( src );
             });
         });
     }
 
+    //chpater数据在open时已经完整的得到，所以直接返回相应的chapter
     LoadChapter(categoryIdx, chapterIdx) {
         return new Promise((resolve, reject) => {
             var chapter = this.category[categoryIdx].chapters[chapterIdx];
@@ -70,10 +80,12 @@ class EHentaiProtocol extends ProtocolBase{
 
     get(filter, isContinue) {
         return new Promise((resolve, reject) => {
-
+            //如果继续上一次的搜索并且有最后一次的搜索结果，那么pageNo从上一次的结果增1，否则从0开始
             var pageNo = isContinue && this.lastResult ? this.lastResult.pageNo + 1 : 0;
 
+            //请求书籍列表的url
             var url = 'https://e-hentai.org/';
+            //如果带有filter，则url替换为搜索用的url
             if (filter)
                 url += "?f_search=" + filter + "&page=" + pageNo;
             else
@@ -88,6 +100,7 @@ class EHentaiProtocol extends ProtocolBase{
                     pageNo: pageNo,
                 };
 
+                //解析html页面，得到相关的信息
                 var books = [];
                 var parser = new DOMParser();
                 var doc = parser.parseFromString(html, "text/html");
@@ -95,6 +108,7 @@ class EHentaiProtocol extends ProtocolBase{
                 var tmp = doc.querySelectorAll(".ptb td a");
                 var pages = parseInt( $(  tmp[ tmp.length -2 ] ).text() );
 
+                //解析并构造books中的数据
                 all.forEach( item => {
                     var gl = $(".glname>a", item);
                     if (gl.length == 0) return;
@@ -161,6 +175,7 @@ class EHentaiProtocol extends ProtocolBase{
                 book.category = [];
                 book.protocol = self;
 
+                //因为此站书籍下没有子分类及章节，所以构造一个分类和一个章节
                 var category = new BookCategory();
                 category.name = "";
                 book.category.push(category);
