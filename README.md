@@ -159,6 +159,58 @@ isCountinue参数表示是否继续上一次的搜索。即如果上一次的搜
 此方法应该返回一个Promise,成功时返回一个BookDetail,失败时可以简单的返回错误信息字符串或是异常对象  
 uri即get方法中返回的book的path  
 
+```js
+//书籍详细信息的基类
+//仅展示需要由插件填入的成员及需要重载的方法
+class BookDetail {
+    id = 0;                                     //书籍的id
+    name = "";                                  //书籍的名称
+    path = "";                                  //书籍的path，应该与get方法中返回的一致
+    thumbnail = "name";                         //书籍的封面url
+    category = [BookChapter] ;                              //书籍的分类
+    tags = [];                                  //标签列表
+    vertical = false;                           //是否是纵向阅读
+    LoadChapter( categoryIdx : int, chapterIdx : int ) : Promise(BookChapter)      //读取一个指定的category中的chapter
+    LoadImage( page : BookPageInfo ) : Promise(Blob)                          //读取并返回page指定的页的图像blob对象
+}
+
+//表示一个具体的章节
+class BookChapter
+{
+    name = "";                          //章节名字，显示用
+    id = 0;                             //保留，未使用
+    order = 0;                          //章节顺序，对章节排序用
+    pages = [];                         //章节之下所有的页的array,具体定义由插件自行解释
+    constructor( id, name, order ) 
+}
+
+//表示一个书籍中的一个具体的分类
+//用在动漫之家这类会在一个书籍下有多个版本的情况，比如不同汉化组或是连载与单行本的分别
+class BookCategory
+{
+    id = 0;                     //保留，未使用
+    name = "name";              //分类名字
+    chapters = [];              //分类下的章节
+    constructor(name, id);
+}
+
+//表示一个书籍中的一个具体的页的位置
+class BookPageInfo {
+    category = 0;           //分类索引
+    chapter = 0;            //章节索引
+    page = 0;               //页面索引
+    constructor( category, chapter, page);
+}
+```
+
+###### BookDetail.LoadChapter( categoryIdx : int, chapterIdx : int ) : Promise(BookChapter)
+读取一个指定的category中的chapter。用于无法在ProtocolBase.open方法中得到具体的章节细节数据时使用。  
+有些情况下，你可能只能在open的请求中得到章节的数目，而不能得到其他的详细信息。当开始阅读时，会先调用LoadChapter来准备好chapter中的数据，然后返回给系统。  
+
+###### BookDetail.LoadImage( page : BookPageInfo ) : Promise(Blob)
+读取并返回page指定的页的图的Blob对象。  
+
+
 
 #### ProtocolBase.close( book : BookDetail) : Promise
 关闭打开的书籍源，以释放相应的资源。  
