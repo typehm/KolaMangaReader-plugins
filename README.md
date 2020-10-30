@@ -220,3 +220,8 @@ class BookPageInfo {
 
 
 [参考插件例子](https://github.com/typehm/MangaInspector-plugins/tree/main/examples)
+
+
+
+# 警告
+使用自行或他人编写的插件产生各种后果（包括但不限于用户系统或数据被侵害，产生某些费用，各种权利侵害等）都由使用者自行负担。
