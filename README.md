@@ -216,3 +216,7 @@ class BookPageInfo {
 关闭打开的书籍源，以释放相应的资源。  
 对于基于http的源而言，基本不需要关注此方法。  
 主要用于支持本地文件做为源时，关闭打开的文件之类的资源。  
+
+
+
+[参考插件例子](https://github.com/typehm/MangaInspector-plugins/tree/main/examples)
