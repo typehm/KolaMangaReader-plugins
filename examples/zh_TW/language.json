@@ -1,0 +1,90 @@
+{
+  "zh-TW": [
+
+    {"key": "common.name", "value": "通用"},
+    {"key": "common.language", "value": "當前語言"},
+    {"key": "common.devMode", "value": "開發者模式"},
+    {"key": "common.devmode.nodrag", "value": "打開開發者工具時視窗將無法被拖移"},
+    {"key": "common.devmode.openDevTool", "value": "打開開發者視窗"},
+    {"key": "common.showHelpOnStart", "value": "程式啓動時顯示幫助"},
+    {"key": "common.checkUpdateOnStart", "value": "啓動時檢查更新"},
+    {"key": "common.autoCheckUpdate", "value": "自動檢查更新"},
+    {"key": "common.updateInterval", "value": "檢查更新的間隔時間 (分鐘)"},
+    {"key": "common.useCache", "value": "對網絡請求啓用本地緩存"},
+
+
+
+    {"key": "library.local", "value": "書庫"},
+    {"key": "library.allbooks", "value": "全部書籍"},
+    {"key": "library.online", "value": "源"},
+    {"key": "libaray.newlirary", "value": "新建書架"},
+    {"key": "libaray.newliraryplaceholder", "value": "請輸入書架的名字"},
+    {"key": "libaray.new", "value": "新建"},
+    {"key": "library.menu.view", "value": "查看"},
+    {"key": "library.menu.sort", "value": "排序"},
+    {"key": "library.menu.sort.name", "value": "名稱"},
+    {"key": "library.menu.sort.rate", "value": "評分"},
+    {"key": "library.menu.sort.lastview", "value": "最後閱讀"},
+    {"key": "library.menu.tag", "value": "標籤..."},
+    {"key": "library.menu.rate", "value": "評分"},
+    {"key": "library.menu.import", "value": "添加到本地書庫"},
+    {"key": "library.menu.download", "value": "下載到本地"},
+    {"key": "library.menu.delete", "value": "從書庫中移除"},
+    {"key": "library.name", "value": "書庫"},
+    {"key": "library.cellWidth.title", "value": "縮略圖寬度"},
+    {"key": "library.downloadPath.title", "value": "檔案下載路徑"},
+    {"key": "library.minBookPerFetch.title", "value": "最小書籍顯示數量"},
+    {"key": "library.minBookPerFetch.description", "value": "會不斷從源請求書籍數據直至大於此值或是無法獲取到更多的數據"},
+    {"key": "library.autoImportTagsWhenImportBook.title", "value": "自動導入標籤"},
+    {"key": "library.autoImportTagsWhenImportBook.inlinetitle", "value": "在導入書籍時一並導入從源得到的標籤信息"},
+
+    {"key": "library.key.tag", "value": "管理書籍標籤"},
+
+    {"key": "library.tooltip.config", "value": "選項"},
+    {"key": "library.tooltip.menu", "value": "主菜單"},
+    {"key": "library.tooltip.addcategory", "value": "添加書籍分類"},
+    {"key": "library.tooltip.addsource", "value": "添加遠程書籍源"},
+
+
+    {"key": "viewer.name", "value": "閱讀"},
+    {"key": "viewer.zoomMode.title", "value": "默認圖像綻放模式"},
+    {"key": "viewer.maxPreload.title", "value": "預載圖片數目"},
+    {"key": "viewer.backgroundColor.title", "value": "背景顏色"},
+    {"key": "viewer.autoFullScreen.title", "value": "自動切換爲全屏幕"},
+    {"key": "viewer.autoFullScreen.inlinetitle", "value": "進入閱讀視圖時自動切換爲全屏幕"},
+    {"key": "viewer.key.prev", "value": "向上翻頁"},
+    {"key": "viewer.key.next", "value": "向下翻頁"},
+    {"key": "viewer.key.close", "value": "退出閱讀"},
+    {"key": "viewer.key.detail", "value": "詳細信息"},
+    {"key": "viewer.key.fullscreen", "value": "切換全屏"},
+    {"key": "viewer.key.fitOrigin", "value": "原始圖像尺寸"},
+    {"key": "viewer.key.fitWidth", "value": "匹配窗口寬度"},
+    {"key": "viewer.key.fitHeight", "value": "匹配窗口高度"},
+
+    {"key": "detail.tag", "value": "標籤"},
+
+
+    {"key": "tag.selected", "value": "選擇的標籤"},
+    {"key": "tag.all", "value": "全部標籤"},
+    {"key": "tag.close", "value": "關閉"},
+    {"key": "tag.ok", "value": "確定"},
+    {"key": "tag.newtag", "value": "新建標籤"},
+    {"key": "tag.newtagplaceholder", "value": "請輸入標籤的名字"},
+    {"key": "tag.new", "value": "新建"},
+
+
+    {"key": "config.option", "value": "選項"},
+    {"key": "config.cancel", "value": "取消"},
+    {"key": "config.ok", "value": "確定"},
+    {"key": "config.apply", "value": "應用"},
+    {"key": "config.enable", "value": "已啓用"},
+    {"key": "config.disable", "value": "已禁用"},
+    {"key": "config.uninstall", "value": "卸載"},
+    {"key": "config.filterplaceholder", "value": "查找插件"},
+
+    {"key": "form.path.select", "value": "選擇路徑"},
+    {"key": "form.path.open", "value": "打開路徑"},
+
+    {"key": "plugins.name", "value": "插件"}
+  ]
+}
