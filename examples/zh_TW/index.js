@@ -1,16 +1,12 @@
-const {LanguageManager} = __common__("util");
-const {ProtocolBase} = __common__("protocol");
-
-//register a language
-LanguageManager.Register("zh-TW", "繁體中文");
-
-//load language's JSON file
-LanguageManager.loadJson(__dirname+"/language.json");
+const {LanguagePack} = __common__("language");
 
 //declare a protocol
-class zh_TW_Protocol extends ProtocolBase {
+class zh_TW_Protocol extends LanguagePack {
     name = "繁體中文語言包";
     description = "繁體中文的語言界面支援包";
+    languageCodeName = "zh-TW";
+    languageName = "繁體中文";
+    languageJsonPath = __dirname + "/language.json";
 }
 
 //export the protocol
