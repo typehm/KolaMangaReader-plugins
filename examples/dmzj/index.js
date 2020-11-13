@@ -87,11 +87,9 @@ class DMZJProtocol extends ProtocolBase {
                 var books = [];
                 json.forEach(item => {
                     var book = {
-                        id: item.id,
                         name: item.title,
                         path: "dmzj://" + item.id,
                         thumbnail: item.cover,
-                        referer: this.referer,
                     };
                     books.push(book);
                 });
@@ -125,6 +123,7 @@ class DMZJProtocol extends ProtocolBase {
                     return {name: i.tag_name};
                 });
                 book.vertical = json.islong == 1;
+                book.lastUpdate = Util.timestampToDate( json.last_updatetime);
 
                 //为detail填充章节数据
                 json.chapters.map(chapter => {
@@ -148,8 +147,6 @@ class DMZJProtocol extends ProtocolBase {
 
 };
 
-
-// protocolMgr.register(new DMZJProtocol());
 
 
 module.exports = {

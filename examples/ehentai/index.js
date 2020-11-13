@@ -26,30 +26,30 @@ class EHentaiBookDetail extends BookDetail {
                     //请求url
                     fetch(purl).then( resp => resp.text())
                         .then( html => {
-                        //解析html,得到这个分页上的图像的url,保存起来
-                        var parser = new DOMParser();
-                        var doc = parser.parseFromString(html, "text/html");
-                        var imgs = doc.querySelectorAll("div.gdtm a");
-                        imgs.forEach( (v,i) => {
-                            chapter.pages[ si + i ] = v.href;
+                            //解析html,得到这个分页上的图像的url,保存起来
+                            var parser = new DOMParser();
+                            var doc = parser.parseFromString(html, "text/html");
+                            var imgs = doc.querySelectorAll("div.gdtm a");
+                            imgs.forEach( (v,i) => {
+                                chapter.pages[ si + i ] = v.href;
+                            });
+                            //返回需要读取的页面url
+                            resolve( chapter.pages[page.page ] );
                         });
-                        //返回需要读取的页面url
-                        resolve( chapter.pages[page.page ] );
-                    });
                 }
             })
-            .then(url => {
-                return fetch(url)
-            })
-            .then(resp => resp.text()).then(html => {
-                //解析实际的图像页面
-                var parser = new DOMParser();
-                var doc = parser.parseFromString(html, "text/html");
-                var img = doc.querySelectorAll("img#img");
-                var src = img[0].src;
-                //加载图像并返回blob
-                return Util.downloadImageToBlob( src );
-            });
+                .then(url => {
+                    return fetch(url)
+                })
+                .then(resp => resp.text()).then(html => {
+                    //解析实际的图像页面
+                    var parser = new DOMParser();
+                    var doc = parser.parseFromString(html, "text/html");
+                    var img = doc.querySelectorAll("img#img");
+                    var src = img[0].src;
+                    //加载图像并返回blob
+                    return Util.downloadImageToBlob( src );
+                });
         });
     }
 
@@ -118,7 +118,6 @@ class EHentaiProtocol extends ProtocolBase{
                     var url = gl.attr("href");
                     var name = $(".glink", gl).text();
                     var book = {
-                        // id: 0,
                         name: name,
                         path: "ehentai://" + url.replace("https://e-hentai.org/", ""),
                         thumbnail: cover,
@@ -183,7 +182,7 @@ class EHentaiProtocol extends ProtocolBase{
                 var chapter = new BookChapter();
                 category.chapters.push(chapter);
 
-                chapter.html = html;
+                // chapter.html = html;
 
                 var detail = this.parseDetail(html);
                 console.log(detail);
@@ -203,8 +202,6 @@ class EHentaiProtocol extends ProtocolBase{
     }
 };
 
-
-// protocolMgr.register(new EHentaiProtocol());
 
 
 module.exports = {

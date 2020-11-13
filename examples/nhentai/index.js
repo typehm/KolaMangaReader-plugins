@@ -87,7 +87,6 @@ class NHentaiProtocol extends ProtocolBase {
                     var url = $(".cover", item).attr("href");
                     var name = $(".caption", item).text();
                     var book = {
-                        // id: 0,
                         name: name,
                         path: "nhentai://" + url,
                         thumbnail: cover,
@@ -162,7 +161,6 @@ class NHentaiProtocol extends ProtocolBase {
 };
 
 
-// protocolMgr.register(new NHentaiProtocol());
 
 module.exports = {
     NHentaiProtocol,
