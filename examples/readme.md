@@ -1,9 +1,17 @@
-# MangaInspector插件文档
+# Kola Manga Reader插件文档
 
-MangaInspector支持通过编写插件来扩展系统功能。目前支持对以下的功能进行扩展
+Kola Manga Reader支持通过编写插件来扩展系统功能。目前支持对以下的功能进行扩展
   - 界面语言
   - 远程书籍源
   - 本地文件源
+  
+  
+# 警告
+使用自行或他人编写的插件产生各种后果（包括但不限于用户系统或数据被侵害，产生某些费用，各种权利侵害等）都由使用者自行负担。  
+请在明确的知晓自己的行为后再开始插件的使用和开发。  
+
+  
+  
 
 插件结构
 ----
@@ -51,21 +59,19 @@ module.exports = {
 ```
 #### index.js
 ```js
-//引入所需要的模块
-const {LanguageManager} = __common__("util");
-const {ProtocolBase} = __common__("protocol");
-//注册要支持的语言，参数1是对应json中的key，参数2是显示在设置界面中的下拉列表中的语言名称字符串
-LanguageManager.Register("zh-TW", "繁體中文");
-//加载语言JSON文件
-LanguageManager.loadJson(__dirname+"/language.json");
-//事实上，新语言的支持已经在这里完成了
-
-//但仍然定义并导出派生类以满足插件的规范
-class zh_TW_Protocol extends ProtocolBase {
+const {LanguagePack} = __common__("language");
+//派生一个语言包子类，并设置相应信息，构造时会自动添加入语言模块中
+class zh_TW_Protocol extends LanguagePack {
     name = "繁體中文語言包";
     description = "繁體中文的語言界面支援包";
+    languageCodeName = "zh-TW";
+    languageName = "繁體中文";
+    languageJsonPath = __dirname + "/language.json";
 }
+
+//导出声明的语言包类
 module.exports = {
+    zh_TW_Protocol,
     default : zh_TW_Protocol,
 }
 ```
@@ -110,7 +116,6 @@ class ProtocolBase extends PluginBase {
     description = "";
     protocols = "protocols://;";
     isSource = false;
-    referer = "";
     icon = "";
     reset() {}
     get(filter, isContinue) {}
@@ -125,8 +130,6 @@ class ProtocolBase extends PluginBase {
 插件的描述，当插件没有提供readme.md时，将这个字段显示为插件的描述
 #### ProtocolBase.isSource : boolean
 是否为一个书籍源，当只有isSource为true时，才会被当做一个源来注册入系统
-#### ProtocolBase.referer : string
-是否为http请求提供一个特别的referer地址，为空字符串时不提供。用于某些服务器要求特定的referer的情况
 #### ProtocolBase.icon : string
 源的图标的url。用于显示在书库界面中
 #### ProtocolBase.reset()
@@ -147,7 +150,7 @@ books中的数据结构
 {
     name: "",           //书籍的显示用的名字
     path: "",           //书籍的path，为protocols中的某一个值+书籍的标识符组成的一串唯一的路径，由插件产生并解析
-    thumbnail: "",      //书籍的封面缩略图的url
+    thumbnail: ""       //书籍的封面缩略图的url
 }
 ```
 
@@ -167,7 +170,7 @@ class BookDetail {
     name = "";                                  //书籍的名称
     path = "";                                  //书籍的path，应该与get方法中返回的一致
     thumbnail = "name";                         //书籍的封面url
-    category = [BookChapter] ;                              //书籍的分类
+    category = [BookChapter] ;                  //书籍的分类
     tags = [];                                  //标签列表
     vertical = false;                           //是否是纵向阅读
     LoadChapter( categoryIdx : int, chapterIdx : int ) : Promise(BookChapter)      //读取一个指定的category中的chapter
@@ -216,3 +219,11 @@ class BookPageInfo {
 关闭打开的书籍源，以释放相应的资源。  
 对于基于http的源而言，基本不需要关注此方法。  
 主要用于支持本地文件做为源时，关闭打开的文件之类的资源。  
+
+
+
+[参考插件例子](https://github.com/typehm/KolaMangaReader-plugins/tree/main/examples)
+
+
+
+
