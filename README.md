@@ -32,10 +32,10 @@ Kola Manga Reader支持通过编写插件来扩展系统功能。目前支持对
 插件入口，需要按要求导出一个ProtocolBase的派生类
 ```js
 //基本的index.js例子
-//__common__是针对特定路径的require的封装方法
-const {ProtocolBase} = __common__("protocol");
+//__common__是针对特定路径的require的封装方法,注意模块名的大小写问题，否则会导致模块重复加载
+const {PluginBase} = __common__("Plugin");
 //定义一个ProtocolBase的派生类
-class dummy_Protocol extends ProtocolBase {
+class dummy_Protocol extends PluginBase {
     name = "dummy";
     description = "dummy";
 }
