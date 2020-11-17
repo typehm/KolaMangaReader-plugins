@@ -12,20 +12,28 @@ class DmzjBookDetail extends BookDetail {
         });
     }
 
+    loadChapterPromise = null;
+
     LoadChapter(categoryIdx, chapterIdx) {
         return new Promise((resolve, reject) => {
             var chapter = this.category[categoryIdx].chapters[chapterIdx];
+
+            //判断章节是否己经在加载中，是的话等待加载完成后再返回,否则会出现重复加载章节数据
+            if ( chapter.loadChapterPromise )
+                resolve( Promise.all( [chapter.loadChapterPromise] ) ).then( ()=> chapter );
+
             //判断是否已经是取得过pages数据的章节，如果是的话，直接返回
             if (chapter.pages.length != 0)
                 resolve(chapter);
             else {
                 //如果pages的length为0，那么通过api出取得章节中的详细信息并填入chapter中，然后返回
                 var url = "http://v2.api.dmzj.com/chapter/" + this.id + "/" + chapter.id + ".json";
-                fetch(url).then(resp => resp.json())
+                chapter.loadChapterPromise = fetch(url).then(resp => resp.json())
                     .then(json => {
                         json.page_url.forEach(pUrl => {
                             chapter.pages.push(pUrl);
                         });
+                        chapter.loadChapterPromise = null;
                         resolve(chapter);
                     });
             }
